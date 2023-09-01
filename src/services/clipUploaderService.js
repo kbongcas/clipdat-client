@@ -1,6 +1,7 @@
 import axios from 'axios';
 const UPLOAD_SERVICE_URL = "/uploadapi/users";
-const baseURL = import.meta.env.DEV === true ? UPLOAD_SERVICE_URL : import.meta.env.VITE_CLIPS_API;
+//const baseURL = import.meta.env.DEV === true ? UPLOAD_SERVICE_URL : import.meta.env.VITE_CLIPS_API;
+const baseURL = UPLOAD_SERVICE_URL;
 
 const uploadClip = async (token, file, name, desc, isPublic, onUploadProgress) => {
 
