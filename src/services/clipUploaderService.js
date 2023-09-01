@@ -1,5 +1,5 @@
 import axios from 'axios';
-const CLIP_UPLOADER_SERVICE_URL = "/aapi/users";
+const baseURL = import.meta.env.VITE_UPLOAD_API
 
 const uploadClip = async (token, file, name, desc, isPublic, onUploadProgress) => {
 
@@ -17,7 +17,7 @@ const uploadClip = async (token, file, name, desc, isPublic, onUploadProgress) =
         onUploadProgress: onUploadProgress,
     }
 
-    return await axios.post(CLIP_UPLOADER_SERVICE_URL + "/my/clips", data, config)
+    return await axios.post(baseURL + "/my/clips", data, config)
         .then(res => console.log(res))
         .catch(err => console.log(err))
 

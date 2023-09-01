@@ -1,8 +1,8 @@
 import axios from 'axios';
-const CLIPS_SERVICE_URL = "/clipsapi/users";
+const baseURL = import.meta.env.VITE_CLIPS_API
 
 const getMyClips = async (token) => {
-    return axios.get(CLIPS_SERVICE_URL + "/my/clips",
+    return axios.get(baseURL + "/my/clips",
         {
             headers: {
                 'Authorization': 'Bearer ' + token
