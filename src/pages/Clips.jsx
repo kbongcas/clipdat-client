@@ -18,9 +18,11 @@ const Clips = () => {
 
     getUsersClips()
       .then((userClips) => {
+        console.log(userClips.data)
         userClips.data.sort( (a, b) => {
           return new Date(b.dateCreated) - new Date(a.dateCreated)
         })
+        console.log(userClips.data)
         setClips(userClips.data)
       })
       .catch((reason) => {
