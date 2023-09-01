@@ -7,12 +7,12 @@
   ## Uncomment to use this redirect for Single Page Applications like create-react-app.
   ## Not needed for static site generators.
   [[redirects]]
-    from = "/clipsapi/*"
+    from = "/clipsapi*"
     to = "https://clipsservice.calmmeadow-d45ed0b7.eastus.azurecontainerapps.io:splat"
     status = 200
 
   [[redirects]]
-    from = "/uploadapi/*"
+    from = "/uploadapi*"
     to = "https://clipuploader.calmmeadow-d45ed0b7.eastus.azurecontainerapps.io:splat"
     status = 200
 
