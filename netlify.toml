@@ -13,12 +13,12 @@
 
   [[redirects]]
     from = "/clipsapi/*"
-    to = "https://clipsservice.calmmeadow-d45ed0b7.eastus.azurecontainerapps.io"
+    to = "https://clipsservice.calmmeadow-d45ed0b7.eastus.azurecontainerapps.io:splat"
     status = 200
 
   [[redirects]]
     from = "/uploadapi/*"
-    to = "https://clipuploader.calmmeadow-d45ed0b7.eastus.azurecontainerapps.io"
+    to = "https://clipuploader.calmmeadow-d45ed0b7.eastus.azurecontainerapps.io:splat"
     status = 200
 
   ## (optional) Settings for Netlify Dev
