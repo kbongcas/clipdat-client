@@ -58,9 +58,9 @@ const Upload = () => {
     }
 
     return (
-        <div className="mx-auto max-w-screen-xl items-center gap-8 px-4 sm:px-6 lg:px-8">
-            <div className="py-20 h-screen bg-gray-300 px-2">
-                <div className="max-w-md mx-auto bg-white rounded-lg overflow-hidden md:max-w-lg">
+        <div className="bg-base-100 mx-auto max-w-screen-xl items-center gap-8 px-4 sm:px-6 lg:px-8">
+            <div className="bg-base-100 py-20 h-screen bg-gray-300 px-2">
+                <div className="card bg-base-100 shadow-xl max-w-md mx-auto">
                     <div className="md:flex">
                         <div className="w-full">
 

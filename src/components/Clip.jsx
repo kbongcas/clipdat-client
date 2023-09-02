@@ -6,7 +6,7 @@ import Prototypes from 'prop-types'
 const Clip = ({ index, url, name, description, onSelect }) => {
 
     return (
-        <article className="overflow-hidden rounded-lg border border-gray-100 bg-white shadow-sm">
+        <article className="card card-compact min-w-min bg-base-100 shadow-xl overflow-hidden">
             <button
                 onClick={() => onSelect(index)}
             >
@@ -24,11 +24,11 @@ const Clip = ({ index, url, name, description, onSelect }) => {
                 </div>
 
             </button>
-            <div className="p-4">
+            <div className="p-2">
                 <h3 className="text-lg font-medium text-gray-900">
                     { name }
                 </h3>
-                <p className="mt-2 line-clamp-3 text-md/relaxed text-gray-500">
+                <p className="mt-1 line-clamp-3 text-md/relaxed text-gray-500">
                     { description }
                 </p>
                 <div className="flex justify-between items-center text-gray-400">

@@ -3,6 +3,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { clipsService } from '../services/clipsService'
 import Clip from '../components/Clip';
 import SingleClip from './SingleClip';
+import { LoadingClip } from '../components/Loading/LoadingClip';
 
 const audience = import.meta.env.VITE_AUTH0_AUDIENCE
 
@@ -58,8 +59,8 @@ const Clips = () => {
       onBack={onBackHandler}
     />)
 
-  return ( clips ?
-    <div className="mx-auto max-w-screen-xl items-center gap-8 px-4 sm:px-6 lg:px-8">
+  return ( clips && clips.length > 0 ?
+    <div className="bg-base-100 mx-auto max-w-screen-xl items-center gap-8 px-4 sm:px-6 lg:px-8">
       <div className="m-10 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:grid-cols-4">
         {clips.map((item, i) =>
           <Clip
@@ -74,9 +75,12 @@ const Clips = () => {
       </div>
     </div >
     : 
-    <div>loading</div>
+    (<div className="bg-base-100 mx-auto max-w-screen-xl items-center gap-8 px-4 sm:px-6 lg:px-8">
+      <div className="m-10 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:grid-cols-4">
+        {Array.from({length: 16},(_,index) => <LoadingClip key={index} />) }
+      </div>
+    </div >)
   )
-
 }
 
 export default Clips
