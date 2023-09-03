@@ -1,8 +1,12 @@
-# React + Vite
+# Client for [Clipdat](https://clipdat.netlify.app/)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Client for [Clipdat](https://clipdat.netlify.app/) hosted on [Netlify](https://www.netlify.com/)
 
-Currently, two official plugins are available:
+[![Netlify Status](https://api.netlify.com/api/v1/badges/f0469d91-a355-4e04-8456-4d0abed86b91/deploy-status)](https://app.netlify.com/sites/clipdat/deploys)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Built with 
+
+- [React](https://react.dev/)
+- [Vite](https://vitejs.dev/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Dasiyui](https://daisyui.com/)
