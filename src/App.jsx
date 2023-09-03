@@ -16,9 +16,9 @@ function App() {
           <Header />
            { (user || isLoading) && < Tabs />}
           <Routes>
-            <Route path="/" element={<Public />} />
-            <Route path="/clips/*" element={(user || isLoading) && <Clips />} />
-            <Route path="/upload/*" element={(user || isLoading) && <Upload />} />
+            <Route path="/" element={user || isLoading === true ? <Clips /> : <Public />} />
+            <Route path="/clips/*" element={user || isLoading === true ? <Clips /> : <Public />} />
+            <Route path="/upload/*" element={user || isLoading === true ? <Upload /> : <Public />} />
             <Route path="*" element={<div>Error </div>} />
           </Routes>
         </BrowserRouter>
