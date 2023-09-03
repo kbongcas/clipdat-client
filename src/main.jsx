@@ -13,6 +13,7 @@ const audience  = import.meta.env.VITE_AUTH0_AUDIENCE
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Auth0Provider
+      cacheLocation="localstorage"
       audience={audience}
       domain={domain}
       clientId={clientId}
