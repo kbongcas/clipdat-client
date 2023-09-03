@@ -38,10 +38,7 @@ const Clips = () => {
   }, [getAccessTokenSilently, user?.sub])
 
   const getUsersClips = async () => {
-    var token = await getAccessTokenSilently(
-      {
-        authorizationParams: { audience: audience }
-      })
+    var token = await getAccessTokenSilently()
     return await clipsService.getMyClips(token)
   }
 
