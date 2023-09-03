@@ -6,8 +6,8 @@ export const Tabs = () => {
     const isUploadRoute = useMatch("/upload")
 
     return (
-        <div className="mt-2 bg-base-100 flex flex-col items-center">
-            <div className="bg-base-100 bg-gray-300">
+        <div className="mt-2 flex flex-col items-center">
+            <div className="">
                 <div className="tab">
                     {isClipsRoute 
                         ? <a className="tab tab-lifted tab-active" href="/clips">Clips</a> 

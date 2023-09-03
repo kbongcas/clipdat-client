@@ -8,14 +8,13 @@ import Public from './pages/Public'
 import { Tabs } from './components/Tabs'
 
 function App() {
-  const { isAuthenticated, isLoading, user } = useAuth0();
-  console.log(isAuthenticated)
+  const {isLoading, user } = useAuth0();
   return (
     <div className="flex flex-row">
       <div className="rounded-lg basis-full">
         <BrowserRouter base="/">
           <Header />
-           { user && < Tabs />}
+           { (user || isLoading) && < Tabs />}
           <Routes>
             <Route path="/" element={user || isLoading === true ? <Clips /> : <Public />} />
             <Route path="/clips/*" element={user || isLoading === true ? <Clips /> : <Public />} />

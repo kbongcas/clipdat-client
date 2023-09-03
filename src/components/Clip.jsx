@@ -16,29 +16,21 @@ const Clip = ({ index, url, name, description, onSelect }) => {
                         src={url ? url : "https://media.giphy.com/media/myPdoRAlad0J2/giphy.gif"}
                         className="h-56 w-full object-cover shadow-sm"
                     />
-                    {!url &&
-                        <p className="absolute top-2 text-lg/relaxed text-black bg-gray-200 ">
-                            Your Clip is still Converting...
-                        </p>
-                    }
                 </div>
 
             </button>
-            <div className="p-2">
-                <h3 className="text-lg font-medium text-gray-900">
-                    { name }
-                </h3>
-                <p className="mt-1 line-clamp-3 text-md/relaxed text-gray-500">
-                    { description }
-                </p>
-                <div className="flex justify-between items-center text-gray-400">
-                    <span className="mt-2 line-clamp-3 text-sm/relaxed text-gray-500">
-                    </span>
-                    {url &&
-                    <div className="flex justify-between items-center text-gray-400">
-                        <CopyToClipboardButton url={url} />
-                        <DownloadButton url={url} />
-                    </div>
+            <div className="card-body">
+                <h2 className="card-title break-all"> {name} </h2>
+                <p>{ description } </p>
+                <div className="card-actions justify-end">
+                    {url ?
+                        (<div className="flex justify-between items-center text-gray-400">
+                            <CopyToClipboardButton url={url} />
+                            <DownloadButton url={url} />
+                        </div>) :
+                        (<div className="badge badge-outline badge-warning gap-2">
+                            pending...
+                        </div>)
                     }
                 </div>
             </div>
