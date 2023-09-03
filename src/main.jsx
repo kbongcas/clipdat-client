@@ -8,10 +8,12 @@ import { Auth0Provider } from '@auth0/auth0-react'
 //@TODO - this should be taken out if when hosting
 const domain = import.meta.env.VITE_AUTH0_DOMAIN
 const clientId  = import.meta.env.VITE_AUTH0_CLIENT_ID
+const audience  = import.meta.env.VITE_AUTH0_AUDIENCE
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Auth0Provider
+      audience={audience}
       domain={domain}
       clientId={clientId}
       authorizationParams={{
