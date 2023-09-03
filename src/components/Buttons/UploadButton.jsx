@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom"
 
 const UploadButton = () => {
-      const navigate = useNavigate();
+    const navigate = useNavigate();
     return (
-       <button 
-            className="block rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-teal-700"
+        <button
+            className="btn btn-primary"
             onClick={() => navigate("/upload")}
         >
             Upload!
