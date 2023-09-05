@@ -5,12 +5,13 @@ import Clip from '../components/Clip';
 import { LoadingClip } from '../components/Loading/LoadingClip';
 import CopyToClipboardButton from '../components/Buttons/CopyToClipboardButton';
 import DownloadButton from '../components/Buttons/DownloadButton';
+import PageList from '../components/PageList';
 
-const audience = import.meta.env.VITE_AUTH0_AUDIENCE
+const PAGE_SIZE = 12;
 const defaultSelectedClip = {
-    uri: "https://media.giphy.com/media/myPdoRAlad0J2/giphy.gif",
-    name: "",
-    description: ""
+  uri: "https://media.giphy.com/media/myPdoRAlad0J2/giphy.gif",
+  name: "",
+  description: ""
 }
 
 const Clips = () => {
@@ -18,56 +19,45 @@ const Clips = () => {
   const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
   const [clips, setClips] = useState([]);
   const [selectedClip, setSelectedClip] = useState(defaultSelectedClip);
+  const [activePage, setActivePage] = useState(1);
+  const [pages, setPages] = useState(1);
 
   useEffect(() => {
 
     if (isAuthenticated == false) return;
+    getUsersClips(activePage, PAGE_SIZE)
 
-    getUsersClips()
+  }, [getAccessTokenSilently, user?.sub])
+
+  const getUsersClips = async (page, pageSize) => {
+    var token = await getAccessTokenSilently()
+    await clipsService.getMyClips(token, page, pageSize)
       .then((userClips) => {
-        userClips.data.sort((a, b) => {
+        setPages(Math.ceil(userClips.data.count / pageSize))
+        userClips.data.clips.sort((a, b) => {
           return new Date(b.dateCreated) - new Date(a.dateCreated)
         })
-        setClips(userClips.data)
+        setClips(userClips.data.clips)
       })
       .catch((reason) => {
         console.log("There was a error obtaining user's clips.")
         console.log(reason)
       });
-
-  }, [getAccessTokenSilently, user?.sub])
-
-  const getUsersClips = async () => {
-    var token = await getAccessTokenSilently()
-    return await clipsService.getMyClips(token)
   }
 
-  const onSelectedClipHandler = (key) =>{
-    if(!clips) return;
+  const onSelectedClipHandler = (key) => {
     setSelectedClip(clips[key])
-    window.my_modal_4.showModal()
   }
 
-  
-  /*
-  const onBackHandler = () =>{
-    setSelectedClip(null)
+  const onPageSelect = async (selectedPage) => {
+    setActivePage(selectedPage)
+    await getUsersClips(selectedPage, PAGE_SIZE)
   }
-  */
 
-  /*
-  if (selectedClip) return (
-    <SingleClip
-      url={selectedClip.uri}
-      name={selectedClip.name}
-      description={selectedClip.description}
-      onBack={onBackHandler}
-    />)
-
-    */
   return (
     <div className="mx-auto max-w-screen-xl items-center gap-8 px-4 sm:px-6 lg:px-8">
-      <div className="m-10 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:grid-cols-4">
+      <PageList pages={pages} activePage={activePage} onPageSelect={onPageSelect}/>
+      <div className="m-3 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:grid-cols-4">
         {clips && clips.length > 0 ? (clips.map((item, i) =>
           <Clip
             key={i}
@@ -77,9 +67,9 @@ const Clips = () => {
             description={item.description}
             onSelect={onSelectedClipHandler}
           />
-          )) : (
-            Array.from({length: 16},(_,index) => <LoadingClip key={index} />) 
-          )}
+        )) : (
+          Array.from({ length: 16 }, (_, index) => <LoadingClip key={index} />)
+        )}
       </div>
       <dialog id="my_modal_4" className="modal">
         <form method="dialog" className="modal-box">
