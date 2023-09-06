@@ -14,6 +14,18 @@ const getMyClips = async (token, page = 1, pageSize = 10) => {
     )
 }
 
+const deleteClip = async (token, clipId) => {
+    let id = `/${clipId}`
+    return axios.delete(baseURL + "/my/clips" + id,
+        {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        }
+    )
+}
+
 export const clipsService = {
     getMyClips,
+    deleteClip
 }
