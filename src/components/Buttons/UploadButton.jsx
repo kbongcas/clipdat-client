@@ -4,7 +4,7 @@ const UploadButton = () => {
     const navigate = useNavigate();
     return (
         <button
-            className="btn btn-primary"
+            className="btn btn-primary btn-sm"
             onClick={() => navigate("/upload")}
         >
             Upload!

@@ -1,7 +1,9 @@
 import { useMatch } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 export const Tabs = () => {
 
+    const isHomeRoute = useMatch("/")
     const isClipsRoute = useMatch("/clips")
     const isUploadRoute = useMatch("/upload")
 
@@ -9,13 +11,13 @@ export const Tabs = () => {
         <div className="mt-2 flex flex-col items-center">
             <div className="">
                 <div className="tab">
-                    {isClipsRoute 
-                        ? <a className="tab tab-lifted tab-active" href="/clips">Clips</a> 
-                        : <a className="tab tab-lifted" href="/clips">Clips</a> 
+                    {isClipsRoute || isHomeRoute 
+                        ? <Link className="tab tab-bordered tab-active" to="/clips">Clips</Link> 
+                        : <Link className="tab tab-bordered" to="/clips">Clips</Link> 
                     }
                     {isUploadRoute 
-                        ? <a className="tab tab-lifted tab-active" href="/upload">Upload</a> 
-                        : <a className="tab tab-lifted" href="/upload">Upload</a> 
+                        ? <Link className="tab tab-bordered tab-active" to="/upload">Upload</Link> 
+                        : <Link className="tab tab-bordered" to="/upload">Upload</Link> 
                     }
                 </div>
             </div>
