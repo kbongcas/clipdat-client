@@ -3,7 +3,7 @@ import DownloadButton from "./Buttons/DownloadButton"
 import Prototypes from 'prop-types'
 
 
-const Clip = ({ index, url, name, description, onSelect }) => {
+const Clip = ({ index, url, name, description, dateCreated ,onSelect }) => {
 
     return (
         <article className="card card-compact min-w-min bg-base-100 shadow-xl overflow-hidden">
@@ -21,17 +21,23 @@ const Clip = ({ index, url, name, description, onSelect }) => {
             </button>
             <div className="card-body">
                 <h2 className="card-title break-all"> {name} </h2>
-                <p>{ description } </p>
-                <div className="card-actions justify-end">
-                    {url ?
-                        (<div className="flex justify-between items-center text-gray-400">
-                            <CopyToClipboardButton url={url} />
-                            <DownloadButton url={url} />
-                        </div>) :
-                        (<div className="badge badge-outline badge-warning gap-2">
-                            pending...
-                        </div>)
-                    }
+                <p>{description} </p>
+                <div className="flex justify-between">
+                    <div className="flex flex-col-reverse">
+                        <div className="mb-2 stat-desc">{dateCreated}</div>
+                    </div>
+                    <div className="card-actions justify-end">
+                        {url ?
+                            (<div className="flex justify-between items-center text-gray-400">
+                                <CopyToClipboardButton url={url} />
+                                <DownloadButton url={url} />
+                            </div>) :
+                            (<div className="badge badge-outline badge-warning gap-2">
+                                pending...
+                            </div>)
+                        }
+                        <div className="card-actions"></div>
+                    </div>
                 </div>
             </div>
         </article>
@@ -43,6 +49,7 @@ Clip.propTypes = {
     url: Prototypes.string,
     name: Prototypes.string,
     description: Prototypes.string,
+    dateCreated: Prototypes.string,
     onSelect: Prototypes.func
  };
 

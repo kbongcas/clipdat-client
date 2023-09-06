@@ -7,6 +7,8 @@ import CopyToClipboardButton from '../components/Buttons/CopyToClipboardButton';
 import DownloadButton from '../components/Buttons/DownloadButton';
 import PageList from '../components/PageList';
 import { DeleteButton } from '../components/Buttons/DeleteButton';
+import { EmptyClips } from '../components/EmptyClips';
+import { timePassedCalculator } from '../utils/timePassedCalculator';
 
 const PAGE_SIZE = 12;
 const defaultSelectedClip = {
@@ -14,6 +16,13 @@ const defaultSelectedClip = {
   name: "",
   description: ""
 }
+
+const ClipsLoadingState = {
+  NotLoaded: "Not Loaded",
+  Loading: "Loading",
+  Loaded: "Loaded",
+  LoadedWithError: "Loaded with Error",
+} 
 
 const Clips = () => {
 
@@ -23,6 +32,7 @@ const Clips = () => {
   const [activePage, setActivePage] = useState(1);
   const [pages, setPages] = useState(1);
   const [rerenderModal, setRerenderModal] = useState(false);
+  const [loadingState, setLoadingState] = useState(ClipsLoadingState.NotLoaded);
 
   useEffect(() => {
 
@@ -32,24 +42,28 @@ const Clips = () => {
   }, [getAccessTokenSilently, user?.sub])
 
   const getUsersClips = async (page, pageSize) => {
+
     var token = await getAccessTokenSilently()
+
+    setLoadingState(ClipsLoadingState.Loading);
     await clipsService.getMyClips(token, page, pageSize)
       .then((userClips) => {
+
         setPages(Math.ceil(userClips.data.count / pageSize))
-        console.log(userClips.data.clips)
-        userClips.data.clips.sort((a, b) => {
-          return new Date(b.dateCreated) - new Date(a.dateCreated)
-        })
         setClips(userClips.data.clips)
+        setLoadingState(ClipsLoadingState.Loaded)
+
       })
       .catch((reason) => {
+
         console.log("There was a error obtaining user's clips.")
         console.log(reason)
-      });
+        setLoadingState(ClipsLoadingState.LoadedWithError)
+
+      })
   }
 
   const onSelectedClipHandler = (key) => {
-    console.log('clicke')
     setRerenderModal(!rerenderModal)
     setSelectedClip(clips[key])
     window.clipmodal.showModal()
@@ -61,7 +75,6 @@ const Clips = () => {
   }
 
   const onDelete = async () => {
-    console.log("delete Clicked")
     setClips(clips.filter((clip) => clip.id !== selectedClip.id))
 
     var token = await getAccessTokenSilently()
@@ -83,39 +96,74 @@ const Clips = () => {
         </figure>
         <h2 className="mt-2 font-bold text-lg">{selectedClip.name}</h2>
         <p className="py-2">{selectedClip.description}</p>
-        <div className="card-actions justify-end">
-          {selectedClip.uri ?
-            (<div className="flex justify-between items-center text-gray-400">
-              <CopyToClipboardButton url={selectedClip.uri} />
-              <DownloadButton url={selectedClip.uri} />
-              <DeleteButton onClick={onDelete} />
-            </div>) :
-            (<div className="badge badge-outline badge-warning gap-2">
-              pending...
-            </div>)
-          }
+        <div className="flex justify-between">
+          <div className="flex flex-col-reverse">
+            <div className="mb-2 stat-desc">
+              {timePassedCalculator.getLocalDate(selectedClip.dateCreated)}
+              <br />
+              {timePassedCalculator.getMinTimePassedAsText(selectedClip.dateCreated)}
+            </div>
+          </div>
+          <div className="card-actions justify-end">
+            {selectedClip.uri ?
+              (<div className="flex justify-between items-center text-gray-400">
+                <CopyToClipboardButton url={selectedClip.uri} />
+                <DownloadButton url={selectedClip.uri} />
+                <DeleteButton onClick={onDelete} />
+              </div>) :
+              (<div className="badge badge-outline badge-warning gap-2">
+                pending...
+              </div>)
+            }
+          </div>
         </div>
       </div>
     )
   }
 
+  const showClips = () => {
+
+    return clips.map((item, i) => {
+      let timePassedText = timePassedCalculator.getMinTimePassedAsText(item.dateCreated)
+      return (< Clip
+        key={i}
+        index={i}
+        url={item.uri}
+        name={item.name}
+        description={item.description}
+        dateCreated={timePassedText}
+        onSelect={onSelectedClipHandler}
+      />)
+    });
+  }
+
   return (
     <div className="mx-auto max-w-screen-xl items-center gap-8 px-4 sm:px-6 lg:px-8">
-      <PageList pages={pages} activePage={activePage} onPageSelect={onPageSelect} />
-      <div className="m-3 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:grid-cols-4">
-        {clips && clips.length > 0 ? (clips.map((item, i) =>
-          <Clip
-            key={i}
-            index={i}
-            url={item.uri}
-            name={item.name}
-            description={item.description}
-            onSelect={onSelectedClipHandler}
-          />
-        )) : (
-          Array.from({ length: 16 }, (_, index) => <LoadingClip key={index} />)
-        )}
-      </div>
+      {(loadingState === ClipsLoadingState.Loaded && clips.length > 0)
+        && <PageList pages={pages} activePage={activePage} onPageSelect={onPageSelect} />
+      }
+      {(loadingState === ClipsLoadingState.Loaded && clips.length > 0)
+        && <div className="m-3 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:grid-cols-4">
+          {showClips()}
+        </div>
+      }
+      {(loadingState === ClipsLoadingState.Loaded && clips.length === 0)
+        && <div className="m-3 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:grid-cols-4">
+          <EmptyClips />
+        </div>
+      }
+      {
+        (loadingState === ClipsLoadingState.Loading)
+        && <div className="m-3 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:grid-cols-4">
+          {Array.from({ length: 16 }, (_, index) => <LoadingClip key={index} />)}
+        </div>
+      }
+      {
+        (loadingState === ClipsLoadingState.LoadedWithError)
+        && <div className="">
+          Error leading clips
+        </div>
+      }
       <dialog id="clipmodal" className="modal">
         <div className="modal-box m-14">
           <ModalContent rerender={rerenderModal}/>
