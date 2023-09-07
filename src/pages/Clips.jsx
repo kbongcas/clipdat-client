@@ -22,7 +22,7 @@ const ClipsLoadingState = {
   Loading: "Loading",
   Loaded: "Loaded",
   LoadedWithError: "Loaded with Error",
-} 
+}
 
 const Clips = () => {
 
@@ -43,7 +43,7 @@ const Clips = () => {
 
   const getUsersClips = async (page, pageSize) => {
 
-    var token = await getAccessTokenSilently()
+    var token = await getAccessTokenSilently({ ignoreCache: false })
 
     setLoadingState(ClipsLoadingState.Loading);
     await clipsService.getMyClips(token, page, pageSize)
@@ -136,7 +136,6 @@ const Clips = () => {
       />)
     });
   }
-
   return (
     <div className="mx-auto max-w-screen-xl items-center gap-8 px-4 sm:px-6 lg:px-8">
       {(loadingState === ClipsLoadingState.Loaded && clips.length > 0)
@@ -148,9 +147,7 @@ const Clips = () => {
         </div>
       }
       {(loadingState === ClipsLoadingState.Loaded && clips.length === 0)
-        && <div className="m-3 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:grid-cols-4">
-          <EmptyClips />
-        </div>
+        && <EmptyClips />
       }
       {
         (loadingState === ClipsLoadingState.Loading)
@@ -166,7 +163,7 @@ const Clips = () => {
       }
       <dialog id="clipmodal" className="modal">
         <div className="modal-box m-14">
-          <ModalContent rerender={rerenderModal}/>
+          <ModalContent rerender={rerenderModal} />
         </div>
         <form method="dialog" className="modal-backdrop">
           <button>close</button>

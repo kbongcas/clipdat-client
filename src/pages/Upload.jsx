@@ -22,6 +22,7 @@ const Upload = () => {
     const [filename, setFilename] = useState('')
     const [name, setName] = useState('');
     const [desc, setDesc] = useState('');
+    const [showError, setShowError] = useState(false);
 
     const [uploadState, setUploadState] = useState(UploadState.PreUpload);
 
@@ -52,15 +53,25 @@ const Upload = () => {
                 }, 1500);
             })
             .catch((er) => {
-                setUploadProgress(UploadState.Failed)
-                setUploadProgress(0);
                 console.log('error uploading clip: ', er)
+                setUploadState(UploadState.Failed)
+                setShowError(true)
+                setUploadProgress(0);
+                setTimeout(() => {
+                    setShowError(false)
+                }, 6000);
             })
     }
 
     const onFileInput = (e) => {
-        setFile(e.target.files[0])
-        setFilename(e.target.files[0].name)
+        if (e.target.files && e.target.files[0]) {
+            setFile(e.target.files[0])
+            setFilename(e.target.files[0].name)
+        }
+        else {
+            setFile(null)
+            setFilename('')
+        }
     }
 
     const disableButton = () => {
@@ -86,13 +97,18 @@ const Upload = () => {
 
         else if (buttonState === UploadState.Success)
             return (
-                <input
-                    type="checkbox"
-                    checked="checked"
-                    readOnly={true}
-                    className="checkbox checkbox-success checkbox-lg"
-                />
-
+                <div className="alert alert-success">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        className="stroke-current shrink-0 h-6 w-6"
+                        fill="none"
+                        viewBox="0 0 24 24">
+                        <path strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>Upload Complete!</span>
+                </div>
             )
     }
 
@@ -106,8 +122,11 @@ const Upload = () => {
                             <h1>Upload a Clip!</h1>
                         </span>
                     </figure>
+
                     <div className="card-body">
                         <div className="form-control w-full max-w-sm">
+
+                            {/* Clip Title*/}
                             <div className="indicator w-full">
                                 <span className="indicator-item badge badge-secondary mr-10">Required</span>
                                 <input
@@ -118,49 +137,42 @@ const Upload = () => {
                                     onInput={(e) => setName(e.target.value)}
                                 />
                             </div>
+
+                            {/* Description*/}
+                            <div className="indicator w-full"></div>
                             <textarea
-                                className="mt-2 textarea textarea-bordered textarea-sm w-full max-w-sm"
+                                className="mt-2 textarea textarea-bordered textarea-sm w-full"
                                 placeholder="Description"
                                 maxLength="280"
                                 onInput={(e) => setDesc(e.target.value)}>
                             </textarea>
-                            <div className="mt-2">
-                                {filename != '' ?
-                                    (<span
-                                        className="badge badge-primary"
-                                    >
-                                        {filename}
-                                    </span>) :
-                                    (<p className="text-warning">No file selected</p>)
-                                }
-                            </div>
-                            <div className="">
-                                <div className="mt-2 relative h-20 rounded-lg border-dashed border-2 border-gray-200 bg-white flex justify-center items-center hover:cursor-pointer">
-                                    <div className="absolute">
-                                        <div className="flex flex-col items-center ">
-                                            <i className="fa fa-cloud-upload fa-3x text-gray-200"></i>
-                                            <span className="block text-gray-400 font-normal">Drop your files here</span>
-                                            <span className="block text-gray-400 font-normal">or</span>
 
-                                            <span className="block text-blue-400 font-normal">Browse files</span>
 
-                                        </div>
-                                    </div>
+                            {/* File Input*/}
+
+                            <div className="form-control mt-4 w-full">
+                                <div className="indicator w-full">
+                                    <span className="indicator-item badge badge-secondary mr-10">Required</span>
                                     <input
                                         type="file"
-                                        className="h-full w-full opacity-0"
-                                        name=""
-                                        onInput={onFileInput}
+                                        className="file-input file-input-bordered file-input-md w-full "
+                                        onInput={(e) => onFileInput(e)}
                                         accept=".mp4"
                                     />
                                 </div>
-                                <div className="flex justify-between items-center text-gray-400">
-                                    <span>Accepted file type: .mp4 only</span>
-                                </div>
+                                <label className="label">
+                                    <span className="label-text-alt"> .mp4 only</span>
+                                    <span className="label-text-alt">180 MB max</span>
+                                </label>
                             </div>
                             <div className="flex justify-center mt-3">
                                 {getUploadStateView(uploadState)}
                             </div>
+                            {uploadState === UploadState.Failed && showError &&
+                                <div className="alert alert-error mt-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                    <span>Oops! Error Occurred. Please try again.</span>
+                                </div>}
                         </div>
                     </div>
                 </div>
