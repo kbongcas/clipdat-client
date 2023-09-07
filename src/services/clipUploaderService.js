@@ -6,7 +6,6 @@ const baseURL = UPLOAD_SERVICE_URL;
 const uploadClip = async (token, file, name, desc, isPublic, onUploadProgress) => {
 
     const data = new FormData()
-    console.log(file)
     data.append('file', file)
     data.append('name', name)
     data.append('description', desc)
@@ -20,9 +19,6 @@ const uploadClip = async (token, file, name, desc, isPublic, onUploadProgress) =
     }
 
     return await axios.post(baseURL + "/my/clips", data, config)
-        .then(res => console.log(res))
-        .catch(err => console.log(err))
-
 }
 
 export const clipUploaderService = {

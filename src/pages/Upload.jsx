@@ -4,23 +4,31 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from "react-router-dom";
 
 const audience = import.meta.env.VITE_AUTH0_AUDIENCE
+const UploadState = {
+    PreUpload: "preUpload",
+    Uploading: "uploading",
+    Processing: "processing",
+    Success: "success",
+    Failed: "failed",
+}
 
 const Upload = () => {
 
     const navigate = useNavigate()
-    const {getAccessTokenSilently } = useAuth0();
+    const { getAccessTokenSilently } = useAuth0();
+
     const [uploadProgress, setUploadProgress] = useState(0);
-    const [file, setFile] = useState('');
+    const [file, setFile] = useState(null);
     const [filename, setFilename] = useState('')
     const [name, setName] = useState('');
     const [desc, setDesc] = useState('');
-    // states - preUpload,uploading,postUpload,finished
-    const [uploadState, setUploadState] = useState('preUpload');
+
+    const [uploadState, setUploadState] = useState(UploadState.PreUpload);
 
     const uploadProgressHandler = (progressEvent) => {
         var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
         setUploadProgress(percentCompleted);
-        if(percentCompleted === 100) setUploadState('postUpload')
+        if (percentCompleted === 100) setUploadState(UploadState.Processing)
     }
 
     const attemptUpload = async (e) => {
@@ -32,57 +40,60 @@ const Upload = () => {
                 authorizationParams: { audience: audience }
             })
 
-        setUploadState('uploading')
+        setUploadState(UploadState.Uploading)
         setUploadProgress(0)
-
         clipUploaderService
             .uploadClip(token, file, name, desc, true, uploadProgressHandler)
-            .then(() => { 
-                console.log('successful upload')
-             })
-            .catch((er) => console.log('error uploading clip: ', er))
-            .finally(() => {
-                setUploadState('finished')
+            .then(() => {
+                setUploadState(UploadState.Success)
                 setUploadProgress(0);
                 setTimeout(() => {
                     navigate("/clips")
                 }, 1500);
             })
+            .catch((er) => {
+                setUploadProgress(UploadState.Failed)
+                setUploadProgress(0);
+                console.log('error uploading clip: ', er)
+            })
     }
 
-    const onChange = (e) => {
+    const onFileInput = (e) => {
         setFile(e.target.files[0])
         setFilename(e.target.files[0].name)
     }
 
     const disableButton = () => {
-        return (name != '' && desc != '' && filename != '') ?  "" : "disabled"
+        return (name != '' && filename != '') ? "" : "disabled"
     }
 
     const getUploadStateView = (buttonState) => {
-        if(buttonState === "preUpload") 
-            return  (<button 
-                        className="btn btn-secondary btn-block"
-                        onClick={attemptUpload}
-                        disabled={disableButton()}
-                    >
-                    Create
-                    </button>)
-        else if(buttonState === "uploading") 
-            return (<progress className="progress progress-secondary w-full h-4" 
-                            value={uploadProgress} max="100"></progress>)
-        else if(buttonState === "postUpload")
+        if (buttonState === UploadState.PreUpload || buttonState === UploadState.Failed)
+            return (<button
+                className="btn btn-secondary btn-block"
+                onClick={attemptUpload}
+                disabled={disableButton()}
+            >
+                Create
+            </button>)
+
+        else if (buttonState === UploadState.Uploading)
+            return (<progress className="progress progress-secondary w-full h-4"
+                value={uploadProgress} max="100"></progress>)
+
+        else if (buttonState === UploadState.Processing)
             return <span className="justify-center loading loading-spinner loading-lg"></span>
-        else if (buttonState == "finished")
+
+        else if (buttonState === UploadState.Success)
             return (
-                <input 
-                type="checkbox" 
-                checked="checked" 
-                className="checkbox checkbox-success checkbox-lg" 
+                <input
+                    type="checkbox"
+                    checked="checked"
+                    readOnly={true}
+                    className="checkbox checkbox-success checkbox-lg"
                 />
 
             )
-
     }
 
     return (
@@ -96,26 +107,29 @@ const Upload = () => {
                         </span>
                     </figure>
                     <div className="card-body">
-                    <div className="form-control w-full max-w-sm">
-                        <input
-                            className="input input-bordered input-sm w-full max-w-sm"
-                            type="text"
-                            placeholder="Title"
-                            onInput={(e) => setName(e.target.value)}
-                        />
-                        <textarea
-                            className="mt-2 textarea textarea-bordered textarea-sm w-full max-w-sm"
-                            placeholder="Description"
-                            onInput={(e) => setDesc(e.target.value)}>
-                        </textarea>
-                        <div className="mt-2">
-                            {filename != '' ?
-                                (<span
-                                    className="badge badge-primary"
-                                >
-                                    {filename}
-                                </span>) :
-                                (<p className="text-warning">No file selected</p>)
+                        <div className="form-control w-full max-w-sm">
+                            <div className="indicator w-full">
+                                <span className="indicator-item badge badge-secondary mr-10">Required</span>
+                                <input
+                                    className="input input-bordered input-sm w-full max-w-sm"
+                                    type="text"
+                                    placeholder="Title"
+                                    onInput={(e) => setName(e.target.value)}
+                                />
+                            </div>
+                            <textarea
+                                className="mt-2 textarea textarea-bordered textarea-sm w-full max-w-sm"
+                                placeholder="Description"
+                                onInput={(e) => setDesc(e.target.value)}>
+                            </textarea>
+                            <div className="mt-2">
+                                {filename != '' ?
+                                    (<span
+                                        className="badge badge-primary"
+                                    >
+                                        {filename}
+                                    </span>) :
+                                    (<p className="text-warning">No file selected</p>)
                                 }
                             </div>
                             <div className="">
@@ -134,7 +148,7 @@ const Upload = () => {
                                         type="file"
                                         className="h-full w-full opacity-0"
                                         name=""
-                                        onChange={onChange}
+                                        onInput={onFileInput}
                                         accept=".mp4"
                                     />
                                 </div>
