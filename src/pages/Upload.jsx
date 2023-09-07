@@ -112,6 +112,7 @@ const Upload = () => {
                                 <span className="indicator-item badge badge-secondary mr-10">Required</span>
                                 <input
                                     className="input input-bordered input-sm w-full max-w-sm"
+                                    maxLength="64"
                                     type="text"
                                     placeholder="Title"
                                     onInput={(e) => setName(e.target.value)}
@@ -120,6 +121,7 @@ const Upload = () => {
                             <textarea
                                 className="mt-2 textarea textarea-bordered textarea-sm w-full max-w-sm"
                                 placeholder="Description"
+                                maxLength="280"
                                 onInput={(e) => setDesc(e.target.value)}>
                             </textarea>
                             <div className="mt-2">

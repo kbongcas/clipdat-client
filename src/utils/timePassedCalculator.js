@@ -16,13 +16,17 @@ const getTimePassed = (date) => {
 
 const getMinTimePassedAsText = (date) => {
     var timePassed = getTimePassed(date)
-    let timePassedText = `${timePassed.seconds} second${timePassed.seconds > 1 ? '' : 's'} ago`
+    console.log(timePassed)
+    let timePassedText = `${timePassed.seconds} second${timePassed.seconds === 1 ? '' : 's'} ago`
+
     timePassedText = timePassed.minutes > 0
-        ? `${timePassed.seconds} second${timePassed.minutes < 1 ? '' : 's'} ago` : timePassedText;
+        ? `${timePassed.minutes} minute${timePassed.minutes === 1 ? '' : 's'} ago` : timePassedText;
+
     timePassedText = timePassed.hours > 0
-        ? `${timePassed.hours} hour${timePassed.hours < 1 ? '' : 's'} ago` : timePassedText
+        ? `${timePassed.hours} hour${timePassed.hours === 1 ? '' : 's'} ago` : timePassedText
+
     timePassedText = timePassed.days > 0
-        ? `${timePassed.days} day${timePassed.days < 1 ? '' : 's'} ago` : timePassedText
+        ? `${timePassed.days} day${timePassed.days === 1 ? '' : 's'} ago` : timePassedText
 
     return timePassedText;
 }
