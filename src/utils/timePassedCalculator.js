@@ -16,7 +16,6 @@ const getTimePassed = (date) => {
 
 const getMinTimePassedAsText = (date) => {
     var timePassed = getTimePassed(date)
-    console.log(timePassed)
     let timePassedText = `${timePassed.seconds} second${timePassed.seconds === 1 ? '' : 's'} ago`
 
     timePassedText = timePassed.minutes > 0
