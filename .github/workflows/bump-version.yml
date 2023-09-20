@@ -18,10 +18,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Check out the content (source branch).  Use a deploy key so that
-    # when we push changes, it will trigger the release workflow
-    # run that runs on: tag. (Using the GitHub token would
-    # not run the workflow to prevent infinite recursion.)
     - name: Check out source
       uses: actions/checkout@v2
 
