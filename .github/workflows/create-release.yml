@@ -1,9 +1,11 @@
 name: Create Release
 
 on:
-    push:
-      tags:
-        - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Create a release'
+
 jobs:
     create-github-release:
       name: Create GitHub Release
