@@ -2,9 +2,6 @@ name: Create Release
 
 on:
   workflow_dispatch:
-    inputs:
-      version:
-        description: 'Create a release'
 
 jobs:
     create-github-release:
@@ -16,6 +13,6 @@ jobs:
         - name: Checkout code
           uses: actions/checkout@v3
         - name: Create Release
-          run: gh release create ${{ github.ref }} --generate-notes --target master
+          run: gh release create ${{ github.ref }} --generate-notes --target
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
