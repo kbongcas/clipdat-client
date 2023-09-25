@@ -16,11 +16,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       domain={domain}
       clientId={clientId}
       useRefreshTokens={true}
-      cacheLocation="localstorage"
+      cacheLocation="memory"
       authorizationParams={{
         redirect_uri: window.location.origin,
         audience: audience,
-        scope: 'openid profile email offline_access',
+        scope: 'openid profile email',
         prompt: 'consent'
       }}>
       <App />
