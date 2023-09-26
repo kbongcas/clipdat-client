@@ -6,19 +6,32 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Upload from './pages/Upload'
 import Public from './pages/Public'
 import { Tabs } from './components/Tabs'
+import VerifyEmail from './pages/VerifyEmail'
+import Login from './pages/Login'
 
 function App() {
   const {isLoading, user } = useAuth0();
+
+  const getPage = (pageToRender) => {
+    if(user || isLoading == true)
+    {
+      if(user && user.email_verified) return pageToRender;
+      else return <VerifyEmail />
+    }
+    else return <Public />
+  }
+
   return (
     <div className="flex flex-row">
       <div className="rounded-lg basis-full">
         <BrowserRouter base="/">
           <Header />
-           { (user || isLoading) && < Tabs />}
+           { ( (user && user.email_verified) || isLoading) && < Tabs />}
           <Routes>
-            <Route path="/" element={user || isLoading === true ? <Clips /> : <Public />} />
-            <Route path="/clips/*" element={user || isLoading === true ? <Clips /> : <Public />} />
-            <Route path="/upload/*" element={user || isLoading === true ? <Upload /> : <Public />} />
+            <Route path="/" element={getPage(<Clips />)} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/clips/*" element={getPage(<Clips />)} />
+            <Route path="/upload/*" element={getPage(<Upload />)} />
             <Route path="*" element={<div>Error </div>} />
           </Routes>
         </BrowserRouter>
