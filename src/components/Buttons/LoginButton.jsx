@@ -1,18 +1,16 @@
 import { useAuth0 } from '@auth0/auth0-react';
+import { useNavigate } from 'react-router-dom';
 
 const LoginButton = () => {
 
-    const { loginWithRedirect, isLoading } = useAuth0();
-
-    const handleLogin = () => {
-        loginWithRedirect()
-    }
+    const { isLoading } = useAuth0();
+    const navigate = useNavigate();
 
     return (
         <button
             className="btn btn-primary"
             disabled={isLoading}
-            onClick={handleLogin}
+            onClick={() => navigate("/login")}
             type="button"
         >
             Login or Sign up
