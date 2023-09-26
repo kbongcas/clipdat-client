@@ -6,13 +6,13 @@ export default defineConfig({
   server: {
     proxy: {
       "/clipsapi": {
-        target: "https://clipsservice.calmmeadow-d45ed0b7.eastus.azurecontainerapps.io",
+        target: "https://clipsservice.yellowbay-16887b3b.eastus.azurecontainerapps.io",
         changeOrigin: true,
         secure: false,
         rewrite: (path) => path.replace(/^\/clipsapi/, "")
       },
       "/uploadapi": {
-        target: "https://clipuploader.calmmeadow-d45ed0b7.eastus.azurecontainerapps.io",
+        target: "https://clipuploader.yellowbay-16887b3b.eastus.azurecontainerapps.io",
         changeOrigin: true,
         secure: false,
         rewrite: (path) => path.replace(/^\/uploadapi/, "")
