@@ -19,7 +19,7 @@ const Public = () => {
                         <img src={Logo} alt="Logo" />
                     </div>
                     <h1
-                        className="bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 bg-clip-text text-3xl font-extrabold text-transparent sm:text-5xl"
+                        className="text-3xl font-extrabold sm:text-5xl"
                     >
                         Upload your clip!
                         <span className="sm:block"> Share with friends. </span>
