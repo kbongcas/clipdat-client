@@ -2,7 +2,7 @@ import { useState } from 'react';
 import LoginButton from './Buttons/LoginButton'
 import { useAuth0 } from '@auth0/auth0-react';
 import UploadButton from './Buttons/UploadButton';
-import Logo from '../assets/fake-logo.svg';
+import Logo from '../assets/logo_single_sm.svg'
 import { UserProfile } from './UserProfile';
 
 const Header = () => {

@@ -1,4 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-react';
+import Logo from '../assets/logo_with_name.svg'
+import Logo2 from '../assets/logo_single.svg'
 
 const Public = () => {
 
@@ -13,6 +15,9 @@ const Public = () => {
             <div className="hero-content text-center">
                 <div className="max-w-md"></div>
                 <div className="mx-auto max-w-3xl text-center">
+                    <div className="mb-2 block text-teal-600">
+                        <img src={Logo} alt="Logo" />
+                    </div>
                     <h1
                         className="bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 bg-clip-text text-3xl font-extrabold text-transparent sm:text-5xl"
                     >
