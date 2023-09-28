@@ -13,12 +13,12 @@ function App() {
   const {isLoading, user } = useAuth0();
 
   const getPage = (pageToRender) => {
-    if(user || isLoading == true)
-    {
-      if(user && user.email_verified) return pageToRender;
+    if (isLoading) return;
+    if (!user) return <Public />
+    else {
+      if (user.email_verified) return pageToRender;
       else return <VerifyEmail />
     }
-    else return <Public />
   }
 
   return (
