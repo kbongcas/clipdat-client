@@ -1,9 +1,10 @@
 name: Create Release
 
 on:
-    push:
-      tags:
-        - 'v*'
+  push:
+    tags:
+      - 'v*'
+
 jobs:
     create-github-release:
       name: Create GitHub Release
