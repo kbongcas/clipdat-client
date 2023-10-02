@@ -48,7 +48,6 @@ const Clips = () => {
     setLoadingState(ClipsLoadingState.Loading);
     await clipsService.getMyClips(token, page, pageSize)
       .then((userClips) => {
-
         setPages(Math.ceil(userClips.data.count / pageSize))
         setClips(userClips.data.clips)
         setLoadingState(ClipsLoadingState.Loaded)
