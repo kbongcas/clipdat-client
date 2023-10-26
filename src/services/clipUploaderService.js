@@ -3,6 +3,10 @@ const UPLOAD_SERVICE_URL = "/uploadapi/users";
 //const baseURL = import.meta.env.DEV === true ? UPLOAD_SERVICE_URL : import.meta.env.VITE_CLIPS_API;
 const baseURL = UPLOAD_SERVICE_URL;
 
+const checkHealth = async () => {
+    return await axios.get(baseURL + "/healthcheck")
+}
+
 const uploadClip = async (token, file, name, desc, isPublic, onUploadProgress) => {
 
     const data = new FormData()
@@ -23,4 +27,5 @@ const uploadClip = async (token, file, name, desc, isPublic, onUploadProgress) =
 
 export const clipUploaderService = {
     uploadClip,
+    checkHealth
 }

@@ -36,13 +36,34 @@ const Upload = () => {
 
         e.preventDefault();
         if (file === '') return;
+
+        setUploadState(UploadState.Uploading)
+        setUploadProgress(0)
+        clipUploaderService
+            .checkHealth()
+            .then( () => {
+                upload()
+            })
+            .catch((er) => {
+                console.log('error upload not available', er)
+                setUploadState(UploadState.Failed)
+                setShowError(true)
+                setUploadProgress(0);
+                setTimeout(() => {
+                    setShowError(false)
+                }, 6000);
+            })
+
+
+    }
+
+    const upload = async () => {
+
         var token = await getAccessTokenSilently(
             {
                 authorizationParams: { audience: audience }
             })
 
-        setUploadState(UploadState.Uploading)
-        setUploadProgress(0)
         clipUploaderService
             .uploadClip(token, file, name, desc, true, uploadProgressHandler)
             .then(() => {
