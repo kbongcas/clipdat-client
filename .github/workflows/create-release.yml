@@ -1,20 +1,31 @@
 name: Create Release
-
 on:
   push:
+    branches:
+      - "releases/*"
     tags:
       - 'v*'
 
 jobs:
-    create-github-release:
-      name: Create GitHub Release
-      runs-on: ubuntu-latest
-      permissions:
-        contents: write
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v3
-        - name: Create Release
-          run: gh release create ${{ github.ref }} --generate-notes
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out source
+      uses: actions/checkout@v2
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+        cache: 'npm'
+    - name: Install npm packages
+      run: | 
+        npm ci
+        npm run build --if-present
+    - name: Deploy to netlify
+      uses: netlify/actions/cli@master
+      env:
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+      with:
+        args: deploy --dir=build --prod
+        secrets: '["NETLIFY_AUTH_TOKEN", "NETLIFY_SITE_ID"]'
