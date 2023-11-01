@@ -22,6 +22,6 @@ export default defineConfig({
   },
   plugins: [react()],
   define: {
-    __PACKAGE_JSON_VERSION__: JSON.stringify(process.env.npm_package_version),
+    __PACKAGE_JSON_VERSION__: JSON.stringify(packageJson.version),
   },
 })
