@@ -1,13 +1,12 @@
 name: Create Release
 on:
   push:
-    branches:
-      - "releases/*"
+    tags:
+      - "v*"
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: startsWith(github.ref_name, 'v')
     steps:
     - name: Check out source
       uses: actions/checkout@v2
