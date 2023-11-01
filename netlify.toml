@@ -8,12 +8,12 @@
   ## Not needed for static site generators.
   [[redirects]]
     from = "/clipsapi/*"
-    to = "https://clipsservice.calmmeadow-d45ed0b7.eastus.azurecontainerapps.io/:splat"
+    to = "https://clipsservice.yellowbay-16887b3b.eastus.azurecontainerapps.io/:splat"
     status = 200
 
   [[redirects]]
     from = "/uploadapi/*"
-    to = "https://clipuploader.calmmeadow-d45ed0b7.eastus.azurecontainerapps.io/:splat"
+    to = "https://clipuploader.yellowbay-16887b3b.eastus.azurecontainerapps.io/:splat"
     status = 200
 
   [[redirects]]
